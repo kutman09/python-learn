@@ -1,0 +1,65 @@
+@use '@/styles/variables' as vars;
+
+.exerciseBlock {
+  background-color: vars.$card-bg;
+  padding: 24px;
+  border-radius: vars.$border-radius;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  margin-bottom: 24px;
+}
+
+.question {
+  margin-bottom: 16px;
+  color: vars.$text-main;
+}
+
+.submitBtn {
+  margin-top: 16px;
+  padding: 12px 24px;
+  background-color: vars.$primary-color;
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+  
+  &:disabled {
+    background-color: #bdc3c7;
+    cursor: not-allowed;
+  }
+  
+  &:not(:disabled):hover {
+    background-color: darken(vars.$primary-color, 10%);
+  }
+}
+
+.feedback {
+  margin-top: 24px;
+  padding: 16px;
+  border-radius: vars.$border-radius;
+  
+  .feedbackHeader {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  
+  &.correct {
+    background-color: vars.$success-light;
+    border: 1px solid vars.$success-color;
+    color: darken(vars.$success-color, 20%);
+    
+    .feedbackHeader {
+      color: vars.$success-color;
+    }
+  }
+  
+  &.incorrect {
+    background-color: vars.$error-light;
+    border: 1px solid vars.$error-color;
+    color: darken(vars.$error-color, 20%);
+    
+    .feedbackHeader {
+      color: vars.$error-color;
+    }
+  }
+}

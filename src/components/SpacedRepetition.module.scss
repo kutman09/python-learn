@@ -1,0 +1,92 @@
+@use '@/styles/variables' as vars;
+
+.container {
+  margin-bottom: 48px;
+  background-color: vars.$card-bg;
+  border-radius: vars.$border-radius;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  border: 1px solid vars.$primary-light;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  color: vars.$primary-color;
+  
+  h3 {
+    margin: 0;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}
+
+.card {
+  text-align: center;
+}
+
+.question {
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 24px;
+}
+
+.revealBtn {
+  padding: 12px 24px;
+  background-color: vars.$background;
+  color: vars.$text-main;
+  border: 2px solid vars.$primary-light;
+  font-weight: 600;
+  
+  &:hover {
+    background-color: vars.$primary-light;
+  }
+}
+
+.answerBlock {
+  animation: fadeIn 0.3s ease;
+}
+
+.answer {
+  font-size: 18px;
+  color: vars.$success-color;
+  font-weight: 600;
+  margin-bottom: 24px;
+  padding: 16px;
+  background-color: vars.$success-light;
+  border-radius: vars.$border-radius;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  
+  button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    font-weight: 600;
+    color: white;
+  }
+  
+  .btnHard {
+    background-color: vars.$error-color;
+    &:hover { background-color: darken(vars.$error-color, 10%); }
+  }
+  
+  .btnEasy {
+    background-color: vars.$success-color;
+    &:hover { background-color: darken(vars.$success-color, 10%); }
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

@@ -1,0 +1,11 @@
+@use '@/styles/variables' as vars;
+
+.codeBlock {
+  padding: 16px;
+  border-radius: vars.$border-radius;
+  overflow-x: auto;
+  font-size: 14px;
+  margin: 16px 0;
+  line-height: 1.5;
+  background-color: vars.$code-bg !important;
+}

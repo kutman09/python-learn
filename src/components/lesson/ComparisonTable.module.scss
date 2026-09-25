@@ -1,0 +1,30 @@
+@use '@/styles/variables' as vars;
+
+.tableContainer {
+  overflow-x: auto;
+  margin: 24px 0;
+  border-radius: vars.$border-radius;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: vars.$card-bg;
+  
+  th, td {
+    padding: 16px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+  }
+  
+  th {
+    background-color: vars.$primary-light;
+    color: vars.$primary-color;
+    font-weight: 600;
+  }
+  
+  tr:last-child td {
+    border-bottom: none;
+  }
+}

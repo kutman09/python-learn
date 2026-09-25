@@ -1,0 +1,29 @@
+@use '@/styles/variables' as vars;
+
+.main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 48px 24px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 48px;
+  
+  h1 {
+    font-size: 36px;
+    color: vars.$primary-color;
+    margin-bottom: 12px;
+  }
+  
+  p {
+    font-size: 18px;
+    color: vars.$text-muted;
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+}

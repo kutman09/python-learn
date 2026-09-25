@@ -1,0 +1,92 @@
+@use '@/styles/variables' as vars;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border: 2px solid transparent;
+  border-radius: vars.$border-radius;
+  background-color: vars.$background;
+  cursor: pointer;
+  transition: all vars.$transition-speed;
+  
+  &:hover {
+    background-color: darken(vars.$background, 5%);
+  }
+  
+  &.selected {
+    border-color: vars.$primary-color;
+    background-color: vars.$primary-light;
+  }
+  
+  input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    accent-color: vars.$primary-color;
+  }
+  
+  .optionText {
+    font-size: 16px;
+  }
+}
+
+.textInput {
+  padding: 16px;
+  font-size: 16px;
+  border: 2px solid #ddd;
+  border-radius: vars.$border-radius;
+  width: 100%;
+  font-family: 'Courier New', Courier, monospace;
+  
+  &:focus {
+    outline: none;
+    border-color: vars.$primary-color;
+  }
+}
+
+.codeLine {
+  display: flex;
+  align-items: center;
+  font-family: 'Courier New', Courier, monospace;
+  background-color: vars.$code-bg;
+  color: vars.$code-text;
+  padding: 16px;
+  border-radius: vars.$border-radius;
+  font-size: 16px;
+  white-space: pre-wrap;
+}
+
+.codeText {
+  white-space: pre-wrap;
+}
+
+.gapInput {
+  width: 60px;
+  margin: 0 8px;
+  padding: 4px;
+  font-family: inherit;
+  font-size: inherit;
+  text-align: center;
+  border: 2px solid #555;
+  border-radius: 4px;
+  background-color: #2c2c2c;
+  color: white;
+  
+  &:focus {
+    outline: none;
+    border-color: vars.$primary-color;
+  }
+}
