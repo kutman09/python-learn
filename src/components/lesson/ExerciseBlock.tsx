@@ -9,6 +9,7 @@ import { CheckCircle, XCircle } from 'lucide-react';
 import styles from './ExerciseBlock.module.scss';
 
 import { ExerciseFillGap } from './ExerciseFillGap';
+import { ExerciseCodeRun } from './ExerciseCodeRun';
 
 interface ExerciseBlockProps {
   exercise: Exercise;
@@ -19,15 +20,20 @@ interface ExerciseBlockProps {
 export const ExerciseBlock: React.FC<ExerciseBlockProps> = ({ exercise, onComplete, savedAnswer }) => {
   const [selectedAnswer, setSelectedAnswer] = useState<string>(savedAnswer || '');
   const [showFeedback, setShowFeedback] = useState<boolean>(!!savedAnswer);
+  const [overrideIsCorrect, setOverrideIsCorrect] = useState<boolean | null>(null);
+  const [overrideExplanation, setOverrideExplanation] = useState<string | null>(null);
 
-  const isCorrect = Array.isArray(exercise.correctAnswer)
-    ? exercise.correctAnswer.includes(selectedAnswer.trim())
-    : selectedAnswer.trim() === exercise.correctAnswer;
+  const baseIsCorrect = exercise.type !== 'code-run' && Array.isArray((exercise as any).correctAnswer)
+    ? (exercise as any).correctAnswer.includes(selectedAnswer.trim())
+    : selectedAnswer.trim() === (exercise as any).correctAnswer;
+    
+  const actualIsCorrect = overrideIsCorrect !== null ? overrideIsCorrect : baseIsCorrect;
+  const actualExplanation = overrideExplanation !== null ? overrideExplanation : exercise.explanation;
 
   const handleSubmit = () => {
     if (!selectedAnswer) return;
     setShowFeedback(true);
-    onComplete(isCorrect);
+    onComplete(actualIsCorrect);
   };
 
   const renderExercise = () => {
@@ -64,18 +70,35 @@ export const ExerciseBlock: React.FC<ExerciseBlockProps> = ({ exercise, onComple
             onChange={(val) => !showFeedback && setSelectedAnswer(val)}
           />
         );
+      case 'code-run':
+        return (
+          <ExerciseCodeRun
+            exercise={exercise}
+            value={selectedAnswer}
+            onChange={(val) => setSelectedAnswer(val)}
+            onCodeRunResult={(isCorrect, explanation) => {
+              // For code run, we override the default handleSubmit logic
+              setOverrideIsCorrect(isCorrect);
+              setOverrideExplanation(explanation || (isCorrect ? 'Отлично!' : 'Ошибка.'));
+              setShowFeedback(true);
+              onComplete(isCorrect);
+            }}
+          />
+        );
       default:
         return <div>Exercise type not supported yet.</div>;
     }
   };
 
+  const isCodeRun = exercise.type === 'code-run';
+
   return (
     <div className={styles.exerciseBlock}>
-      <h3 className={styles.question}>{exercise.question}</h3>
+      {!isCodeRun && <h3 className={styles.question}>{exercise.question}</h3>}
       
       {renderExercise()}
 
-      {!showFeedback && (
+      {!showFeedback && !isCodeRun && (
         <button 
           className={styles.submitBtn} 
           disabled={!selectedAnswer}
@@ -86,12 +109,12 @@ export const ExerciseBlock: React.FC<ExerciseBlockProps> = ({ exercise, onComple
       )}
 
       {showFeedback && (
-        <div className={`${styles.feedback} ${isCorrect ? styles.correct : styles.incorrect}`}>
+        <div className={`${styles.feedback} ${actualIsCorrect ? styles.correct : styles.incorrect}`}>
           <div className={styles.feedbackHeader}>
-            {isCorrect ? <CheckCircle size={20} /> : <XCircle size={20} />}
-            <strong>{isCorrect ? 'Верно!' : 'Неверно'}</strong>
+            {actualIsCorrect ? <CheckCircle size={20} /> : <XCircle size={20} />}
+            <strong>{actualIsCorrect ? 'Верно!' : 'Неверно'}</strong>
           </div>
-          <p>{exercise.explanation}</p>
+          <p className={styles.feedbackText}>{actualExplanation}</p>
         </div>
       )}
     </div>

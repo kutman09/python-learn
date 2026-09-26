@@ -44,10 +44,14 @@ age = 25</code></pre>
       freePractice: [
         {
           id: 'fp-var-1',
-          type: 'text-input',
-          question: 'Напишите строку кода, чтобы присвоить переменной `score` значение 100.',
-          correctAnswer: ['score = 100', 'score=100'],
-          explanation: 'Для создания переменной мы пишем её имя, знак `=` и значение: score = 100.'
+          type: 'code-run',
+          question: 'Напиши код',
+          prompt: 'Напишите код, который создаёт переменную score и присваивает ей значение 100.',
+          starterCode: '# Напиши код здесь\n',
+          checkScript: 'assert "score" in globals(), "Переменная score не создана"\nassert score == 100, "Значение переменной score не равно 100"',
+          explanationOnFail: 'Не забудьте использовать знак = для присваивания.',
+          explanationOnSuccess: 'Отлично! Переменная score успешно создана.',
+          explanation: ''
         }
       ]
     },

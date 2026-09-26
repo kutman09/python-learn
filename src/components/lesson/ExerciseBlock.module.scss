@@ -1,3 +1,4 @@
+@use 'sass:color';
 @use '@/styles/variables' as vars;
 
 .exerciseBlock {
@@ -27,7 +28,7 @@
   }
   
   &:not(:disabled):hover {
-    background-color: darken(vars.$primary-color, 10%);
+    background-color: color.adjust(vars.$primary-color, $lightness: -10%);
   }
 }
 
@@ -46,7 +47,7 @@
   &.correct {
     background-color: vars.$success-light;
     border: 1px solid vars.$success-color;
-    color: darken(vars.$success-color, 20%);
+    color: color.adjust(vars.$success-color, $lightness: -20%);
     
     .feedbackHeader {
       color: vars.$success-color;
@@ -56,10 +57,15 @@
   &.incorrect {
     background-color: vars.$error-light;
     border: 1px solid vars.$error-color;
-    color: darken(vars.$error-color, 20%);
+    color: color.adjust(vars.$error-color, $lightness: -20%);
     
     .feedbackHeader {
       color: vars.$error-color;
     }
+  }
+
+  .feedbackText {
+    white-space: pre-wrap;
+    margin: 0;
   }
 }

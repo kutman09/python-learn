@@ -150,7 +150,7 @@ export const LessonViewer: React.FC<Props> = ({ lesson }) => {
             key={exercise.id} 
             exercise={exercise} 
             onComplete={(isCorrect) => handleExerciseComplete(isCorrect, exercise.id, currentStep.type as 'guided' | 'free' | 'test')} 
-            savedAnswer={answers[exercise.id] ? (answers[exercise.id].isCorrect ? exercise.correctAnswer as string : '') : undefined}
+            savedAnswer={answers[exercise.id] ? (answers[exercise.id].isCorrect ? ((exercise as any).correctAnswer as string || 'Выполнено') : '') : undefined}
           />
           {hasAnswered && (
             <button className={styles.nextBtn} onClick={handleNext}>
@@ -175,7 +175,7 @@ export const LessonViewer: React.FC<Props> = ({ lesson }) => {
             key={exercise.id} 
             exercise={exercise as Exercise} 
             onComplete={(isCorrect) => handleExerciseComplete(isCorrect, exercise.id, 'test')} 
-            savedAnswer={answers[exercise.id] ? (answers[exercise.id].isCorrect ? exercise.correctAnswer as string : '') : undefined}
+            savedAnswer={answers[exercise.id] ? (answers[exercise.id].isCorrect ? ((exercise as any).correctAnswer as string || 'Выполнено') : '') : undefined}
           />
           {hasAnswered && (
             <button className={styles.nextBtn} onClick={handleNext}>
@@ -195,6 +195,31 @@ export const LessonViewer: React.FC<Props> = ({ lesson }) => {
             <div className={styles.scoreValue}>{finalScore}%</div>
             <div className={styles.scoreLabel}>Понимание</div>
           </div>
+
+          {lesson.id === 'lesson-4' && (
+            <div className={styles.subScores}>
+              <h3>Успеваемость по типам данных:</h3>
+              <div className={styles.subScoreGrid}>
+                {lesson.topics.map(t => {
+                  const exercises = [...t.guidedPractice, ...t.freePractice];
+                  if (exercises.length === 0) return null;
+                  const correctCount = exercises.filter(ex => answers[ex.id]?.isCorrect).length;
+                  const percent = Math.round((correctCount / exercises.length) * 100);
+                  let label = t.title;
+                  if (t.id === 'methods_list') label = 'list';
+                  if (t.id === 'methods_set') label = 'set';
+                  if (t.id === 'methods_dict') label = 'dict';
+                  if (t.id === 'methods_immutable') label = 'str, tuple, числа';
+                  return (
+                    <div key={t.id} className={styles.subScoreItem}>
+                      <span className={styles.subLabel}>{label}</span>
+                      <span className={styles.subValue}>{percent}%</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
           
           <div className={styles.summaryList}>
             <h3>Что мы выучили сегодня:</h3>
@@ -212,9 +237,13 @@ export const LessonViewer: React.FC<Props> = ({ lesson }) => {
                 .filter(ex => answers[ex.id] && !answers[ex.id].isCorrect)
                 .map(ex => (
                   <div key={ex.id} className={styles.wrongAnswerItem}>
-                    <p className={styles.q}><strong>В:</strong> {ex.question}</p>
-                    <p className={styles.a}><strong>О:</strong> {Array.isArray(ex.correctAnswer) ? ex.correctAnswer[0] : ex.correctAnswer}</p>
-                    <p className={styles.e}><i>{ex.explanation}</i></p>
+                    <p className={styles.q}><strong>В:</strong> {ex.type === 'code-run' ? (ex as any).prompt : ex.question}</p>
+                    <p className={styles.a}><strong>Ожидалось:</strong> {
+                      ex.type === 'code-run' ? 
+                        ((ex as any).expectedStdout || 'Код должен выполнить правильные действия') :
+                        (Array.isArray(ex.correctAnswer) ? ex.correctAnswer[0] : ex.correctAnswer)
+                    }</p>
+                    <p className={styles.e}><i>{ex.explanation || (ex as any).explanationOnFail}</i></p>
                   </div>
                 ))}
             </div>

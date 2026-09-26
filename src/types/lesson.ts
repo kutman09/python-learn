@@ -1,4 +1,4 @@
-export type LessonSlug = 'lesson-1-basics' | 'lesson-2-operators';
+export type LessonSlug = 'lesson-1-basics' | 'lesson-2-operators' | 'lesson-3-conditions' | 'lesson-4-methods';
 
 export interface LessonContent {
   id: string;
@@ -26,7 +26,7 @@ export interface TheoryBlockData {
   };
 }
 
-export type ExerciseType = 'predict-output' | 'multiple-choice' | 'fill-gap' | 'code-order' | 'text-input';
+export type ExerciseType = 'predict-output' | 'multiple-choice' | 'fill-gap' | 'code-order' | 'text-input' | 'code-run';
 
 export interface BaseExercise {
   id: string;
@@ -59,7 +59,17 @@ export interface TextInputExercise extends BaseExercise {
   correctAnswer: string | string[]; // Can accept multiple valid answers
 }
 
-export type Exercise = PredictOutputExercise | MultipleChoiceExercise | FillGapExercise | TextInputExercise;
+export interface CodeRunExercise extends BaseExercise {
+  type: 'code-run';
+  prompt: string;              // условие задачи словами
+  starterCode?: string;        // опциональная заготовка кода
+  expectedStdout?: string;     // вариант проверки 1: ожидаемый вывод
+  checkScript?: string;        // вариант проверки 2: python-скрипт с assert'ами
+  explanationOnFail?: string;  // опциональное объяснение при неудачной проверке
+  explanationOnSuccess?: string; // опциональное объяснение при удачной проверке
+}
+
+export type Exercise = PredictOutputExercise | MultipleChoiceExercise | FillGapExercise | TextInputExercise | CodeRunExercise;
 
 export interface TestQuestion extends BaseExercise {
   // Same as exercise but mixed

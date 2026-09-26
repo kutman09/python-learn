@@ -1,3 +1,4 @@
+@use 'sass:color';
 @use '@/styles/variables' as vars;
 
 .container {
@@ -24,7 +25,7 @@
   transition: all vars.$transition-speed;
   
   &:hover {
-    background-color: darken(vars.$background, 5%);
+    background-color: color.adjust(vars.$background, $lightness: -5%);
   }
   
   &.selected {

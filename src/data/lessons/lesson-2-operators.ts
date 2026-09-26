@@ -107,6 +107,17 @@ export const lesson2: LessonContent = {
           code: 'a = 7\nb = 7\nprint(a != b)',
           correctAnswer: 'False',
           explanation: 'Мы спрашиваем: 7 НЕ РАВНО 7? Это ложное утверждение, они равны. Значит ответ False.'
+        },
+        {
+          id: 'fp-comp-2',
+          type: 'code-run',
+          question: 'Напиши код',
+          prompt: 'Напишите код, который проверяет, что переменная `age` больше или равна 18. Результат сравнения выведите с помощью `print()`. Переменная `age` уже задана.',
+          starterCode: 'age = 20\n# Ваш код ниже:\n',
+          expectedStdout: 'True',
+          explanationOnFail: 'Проверьте, используете ли вы оператор >= и функцию print().',
+          explanationOnSuccess: 'Отлично! >= правильно проверяет "больше или равно".',
+          explanation: ''
         }
       ]
     }

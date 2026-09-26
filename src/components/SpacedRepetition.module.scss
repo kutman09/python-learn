@@ -1,3 +1,4 @@
+@use 'sass:color';
 @use '@/styles/variables' as vars;
 
 .container {
@@ -77,12 +78,12 @@
   
   .btnHard {
     background-color: vars.$error-color;
-    &:hover { background-color: darken(vars.$error-color, 10%); }
+    &:hover { background-color: color.adjust(vars.$error-color, $lightness: -10%); }
   }
   
   .btnEasy {
     background-color: vars.$success-color;
-    &:hover { background-color: darken(vars.$success-color, 10%); }
+    &:hover { background-color: color.adjust(vars.$success-color, $lightness: -10%); }
   }
 }
 

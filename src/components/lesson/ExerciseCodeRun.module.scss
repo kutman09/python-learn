@@ -1,0 +1,97 @@
+@use 'sass:color';
+@use '@/styles/variables' as vars;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.prompt {
+  font-size: 16px;
+  color: vars.$text-main;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.editorWrapper {
+  border: 1px solid #ddd;
+  border-radius: vars.$border-radius;
+  overflow: hidden;
+  background-color: vars.$code-bg;
+  color: #fff;
+}
+
+.editor {
+  min-height: 100px;
+  outline: none;
+}
+
+.textarea {
+  outline: none !important;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.runBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background-color: vars.$primary-color;
+  color: white;
+  border-radius: vars.$border-radius;
+  font-weight: 600;
+  cursor: pointer;
+  
+  &:hover:not(:disabled) {
+    background-color: color.adjust(vars.$primary-color, $lightness: -10%);
+  }
+  
+  &:disabled {
+    background-color: #bdc3c7;
+    cursor: not-allowed;
+  }
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+
+.outputArea {
+  background-color: #2c3e50;
+  border-radius: vars.$border-radius;
+  padding: 16px;
+  margin-top: 16px;
+}
+
+.outputHeader {
+  color: #bdc3c7;
+  font-size: 12px;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #34495e;
+  padding-bottom: 4px;
+}
+
+.stdout {
+  color: #ecf0f1;
+  font-family: 'Courier New', Courier, monospace;
+  white-space: pre-wrap;
+  margin: 0;
+}
+
+.stderr {
+  color: vars.$error-color;
+  font-family: 'Courier New', Courier, monospace;
+  white-space: pre-wrap;
+  margin: 0;
+}
