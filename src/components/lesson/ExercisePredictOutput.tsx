@@ -1,22 +1,27 @@
 import React from 'react';
 import { PredictOutputExercise } from '@/types/lesson';
+import { Language } from '@/contexts/LanguageContext';
+import { t, tUi } from '@/lib/i18n';
 import { CodeBlock } from './CodeBlock';
 import styles from './Exercise.module.scss';
 
 interface Props {
+  language: Language;
   exercise: PredictOutputExercise;
   value: string;
   onChange: (val: string) => void;
 }
 
-export const ExercisePredictOutput: React.FC<Props> = ({ exercise, value, onChange }) => {
+export const ExercisePredictOutput: React.FC<Props> = ({ exercise, value, onChange, language }) => {
   return (
     <div className={styles.container}>
       <CodeBlock code={exercise.code} />
       
       {exercise.options ? (
         <div className={styles.options}>
-          {exercise.options.map((opt, i) => (
+          {exercise.options.map((optRaw, i) => {
+            const opt = t(optRaw, language);
+            return (
             <label key={i} className={`${styles.option} ${value === opt ? styles.selected : ''}`}>
               <input
                 type="radio"
@@ -27,7 +32,7 @@ export const ExercisePredictOutput: React.FC<Props> = ({ exercise, value, onChan
               />
               <span className={styles.optionText}>{opt}</span>
             </label>
-          ))}
+          )})}
         </div>
       ) : (
         <input
@@ -35,7 +40,7 @@ export const ExercisePredictOutput: React.FC<Props> = ({ exercise, value, onChan
           className={styles.textInput}
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          placeholder="Введите результат (что будет выведено)..."
+          placeholder={tUi('output', language)}
         />
       )}
     </div>

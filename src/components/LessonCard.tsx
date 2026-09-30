@@ -4,6 +4,8 @@ import React from 'react';
 import Link from 'next/link';
 import { LessonProgress } from '@/lib/progress';
 import { CheckCircle, Clock } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { tUi } from '@/lib/i18n';
 import styles from './LessonCard.module.scss';
 
 interface Props {
@@ -16,6 +18,7 @@ interface Props {
 }
 
 export const LessonCard: React.FC<Props> = ({ slug, title, description, available, progress }) => {
+  const { language } = useLanguage();
   return (
     <div className={`${styles.card} ${!available ? styles.unavailable : ''}`}>
       <div className={styles.content}>
@@ -25,24 +28,24 @@ export const LessonCard: React.FC<Props> = ({ slug, title, description, availabl
         {progress && (
           <div className={styles.progressBadge}>
             <CheckCircle size={16} />
-            <span>Пройдено ({progress.score}%)</span>
+            <span>{language === 'ru' ? 'Пройдено' : 'Өтүлдү'} ({progress.score}%)</span>
           </div>
         )}
         
         {!available && (
           <div className={styles.soonBadge}>
             <Clock size={16} />
-            <span>Скоро появится</span>
+            <span>{tUi('soon', language)}</span>
           </div>
         )}
       </div>
       
       {available ? (
         <Link href={`/lessons/${slug}`} className={styles.actionBtn}>
-          {progress ? 'Пройти заново' : 'Начать занятие'}
+          {progress ? (language === 'ru' ? 'Пройти заново' : 'Кайрадан баштоо') : (language === 'ru' ? 'Начать занятие' : 'Сабакты баштоо')}
         </Link>
       ) : (
-        <button className={styles.actionBtn} disabled>В разработке</button>
+        <button className={styles.actionBtn} disabled>{language === 'ru' ? 'В разработке' : 'Иштелүүдө'}</button>
       )}
     </div>
   );

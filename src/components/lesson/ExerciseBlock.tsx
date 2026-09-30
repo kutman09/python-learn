@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { t, tUi } from '@/lib/i18n';
 import { Exercise } from '@/types/lesson';
 import { ExercisePredictOutput } from './ExercisePredictOutput';
 import { ExerciseMultipleChoice } from './ExerciseMultipleChoice';
@@ -18,6 +20,7 @@ interface ExerciseBlockProps {
 }
 
 export const ExerciseBlock: React.FC<ExerciseBlockProps> = ({ exercise, onComplete, savedAnswer }) => {
+  const { language } = useLanguage();
   const [selectedAnswer, setSelectedAnswer] = useState<string>(savedAnswer || '');
   const [showFeedback, setShowFeedback] = useState<boolean>(!!savedAnswer);
   const [overrideIsCorrect, setOverrideIsCorrect] = useState<boolean | null>(null);
@@ -40,7 +43,7 @@ export const ExerciseBlock: React.FC<ExerciseBlockProps> = ({ exercise, onComple
     switch (exercise.type) {
       case 'predict-output':
         return (
-          <ExercisePredictOutput
+          <ExercisePredictOutput language={language}
             exercise={exercise}
             value={selectedAnswer}
             onChange={(val) => !showFeedback && setSelectedAnswer(val)}
@@ -48,7 +51,7 @@ export const ExerciseBlock: React.FC<ExerciseBlockProps> = ({ exercise, onComple
         );
       case 'multiple-choice':
         return (
-          <ExerciseMultipleChoice
+          <ExerciseMultipleChoice language={language}
             exercise={exercise}
             value={selectedAnswer}
             onChange={(val) => !showFeedback && setSelectedAnswer(val)}
@@ -72,7 +75,7 @@ export const ExerciseBlock: React.FC<ExerciseBlockProps> = ({ exercise, onComple
         );
       case 'code-run':
         return (
-          <ExerciseCodeRun
+          <ExerciseCodeRun language={language}
             exercise={exercise}
             value={selectedAnswer}
             onChange={(val) => setSelectedAnswer(val)}
@@ -94,7 +97,7 @@ export const ExerciseBlock: React.FC<ExerciseBlockProps> = ({ exercise, onComple
 
   return (
     <div className={styles.exerciseBlock}>
-      {!isCodeRun && <h3 className={styles.question}>{exercise.question}</h3>}
+      {!isCodeRun && <h3 className={styles.question}>{t(exercise.question, language)}</h3>}
       
       {renderExercise()}
 
@@ -112,9 +115,9 @@ export const ExerciseBlock: React.FC<ExerciseBlockProps> = ({ exercise, onComple
         <div className={`${styles.feedback} ${actualIsCorrect ? styles.correct : styles.incorrect}`}>
           <div className={styles.feedbackHeader}>
             {actualIsCorrect ? <CheckCircle size={20} /> : <XCircle size={20} />}
-            <strong>{actualIsCorrect ? 'Верно!' : 'Неверно'}</strong>
+            <strong>{actualIsCorrect ? tUi('correct', language) : tUi('incorrect', language)}</strong>
           </div>
-          <p className={styles.feedbackText}>{actualExplanation}</p>
+          <p className={styles.feedbackText}>{t(actualExplanation as any, language)}</p>
         </div>
       )}
     </div>

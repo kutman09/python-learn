@@ -10,10 +10,18 @@
   text-align: center;
   margin-bottom: 48px;
   
-  h1 {
-    font-size: 36px;
-    color: vars.$primary-color;
+  .headerTop {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
     margin-bottom: 12px;
+    
+    h1 {
+      font-size: 36px;
+      color: vars.$primary-color;
+      margin-bottom: 0;
+    }
   }
   
   p {

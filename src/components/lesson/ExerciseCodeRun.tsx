@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { CodeRunExercise } from '@/types/lesson';
+import { Language } from '@/contexts/LanguageContext';
+import { t, tUi } from '@/lib/i18n';
 import { runPythonCode, initPyodide } from '@/lib/pyodide';
 import Editor from 'react-simple-code-editor';
 import { highlight, languages } from 'prismjs';
@@ -11,13 +13,14 @@ import styles from './ExerciseCodeRun.module.scss';
 import { Play, Check, Loader2 } from 'lucide-react';
 
 interface Props {
+  language: Language;
   exercise: CodeRunExercise;
   value: string;
   onChange: (val: string) => void;
   onCodeRunResult: (isCorrect: boolean, errorExplanation?: string) => void;
 }
 
-export const ExerciseCodeRun: React.FC<Props> = ({ exercise, value, onChange, onCodeRunResult }) => {
+export const ExerciseCodeRun: React.FC<Props> = ({ exercise, value, onChange, onCodeRunResult, language }) => {
   const [code, setCode] = useState(value || exercise.starterCode || '');
   const [isRunning, setIsRunning] = useState(false);
   const [stdout, setStdout] = useState('');
@@ -47,23 +50,23 @@ export const ExerciseCodeRun: React.FC<Props> = ({ exercise, value, onChange, on
       } else {
         // Check script or expected stdout
         let isCorrect = true;
-        let failReason = exercise.explanationOnFail || "Результат не совпадает с ожидаемым.";
+        let failReason = exercise.explanationOnFail ? t(exercise.explanationOnFail, language) : (language === 'ky' ? "Натыйжа күтүлгөндөй эмес." : "Результат не совпадает с ожидаемым.");
 
         if (exercise.checkScript) {
           isCorrect = !!result.checkSuccess;
           if (!isCorrect && result.checkError) {
-            failReason += "\nДетали: " + result.checkError;
+            failReason += "\n" + (language === 'ky' ? "Толук: " : "Детали: ") + result.checkError;
           }
         } else if (exercise.expectedStdout !== undefined) {
           const expected = exercise.expectedStdout.trim();
           const actual = result.stdout.trim();
           if (expected !== actual) {
             isCorrect = false;
-            failReason = exercise.explanationOnFail || `Ожидалось: ${expected}\nПолучено: ${actual}`;
+            failReason = exercise.explanationOnFail ? t(exercise.explanationOnFail, language) : (language === 'ky' ? `Күтүлгөн: ${expected}\nАлынган: ${actual}` : `Ожидалось: ${expected}\nПолучено: ${actual}`);
           }
         }
 
-        onCodeRunResult(isCorrect, isCorrect ? (exercise.explanationOnSuccess || "Отлично!") : failReason);
+        onCodeRunResult(isCorrect, isCorrect ? (exercise.explanationOnSuccess ? t(exercise.explanationOnSuccess, language) : (language === 'ky' ? "Азаматсыз!" : "Отлично!")) : failReason);
       }
     } catch (e: any) {
       setErrorMsg(e.message);
@@ -76,7 +79,7 @@ export const ExerciseCodeRun: React.FC<Props> = ({ exercise, value, onChange, on
 
   return (
     <div className={styles.container}>
-      <p className={styles.prompt}>{exercise.prompt}</p>
+      <p className={styles.prompt}>{t(exercise.prompt as any, language)}</p>
       
       <div className={styles.editorWrapper}>
         <Editor
@@ -100,13 +103,13 @@ export const ExerciseCodeRun: React.FC<Props> = ({ exercise, value, onChange, on
           disabled={isRunning || !code.trim()}
         >
           {isRunning ? <Loader2 className={styles.spin} size={18} /> : <Play size={18} />}
-          <span>{isRunning ? 'Выполняется...' : 'Запустить и проверить'}</span>
+          <span>{isRunning ? (language === 'ru' ? 'Выполняется...' : 'Аткарылууда...') : tUi('runAndCheck', language)}</span>
         </button>
       </div>
 
       {(stdout || errorMsg) && (
         <div className={styles.outputArea}>
-          <div className={styles.outputHeader}>Вывод программы</div>
+          <div className={styles.outputHeader}>{tUi('output', language)}</div>
           {stdout && <pre className={styles.stdout}>{stdout}</pre>}
           {errorMsg && <pre className={styles.stderr}>{errorMsg}</pre>}
         </div>

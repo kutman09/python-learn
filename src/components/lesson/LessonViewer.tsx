@@ -9,6 +9,9 @@ import { calculateScore, ScoreData } from '@/lib/scoring';
 import styles from './LessonViewer.module.scss';
 import Link from 'next/link';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { LanguageSwitcher } from '@/components/LanguageSwitcher';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { tUi, t } from '@/lib/i18n';
 
 interface Props {
   lesson: LessonContent;
@@ -21,6 +24,7 @@ type StepState = {
 };
 
 export const LessonViewer: React.FC<Props> = ({ lesson }) => {
+  const { language } = useLanguage();
   const [history, setHistory] = useState<StepState[]>([{ type: 'theory', topicIndex: 0, exIndex: 0 }]);
   const currentStep = history[history.length - 1];
   
@@ -37,7 +41,7 @@ export const LessonViewer: React.FC<Props> = ({ lesson }) => {
 
   const topic = lesson.topics[currentStep.topicIndex];
   
-  const totalSteps = lesson.topics.reduce((acc, t) => acc + 1 + t.guidedPractice.length + t.freePractice.length, 0) + lesson.test.length + 1;
+  const totalSteps = lesson.topics.reduce((acc, topicItem) => acc + 1 + topicItem.guidedPractice.length + topicItem.freePractice.length, 0) + lesson.test.length + 1;
   const progressPercent = (history.length / totalSteps) * 100;
 
   const handleNext = () => {
@@ -126,10 +130,10 @@ export const LessonViewer: React.FC<Props> = ({ lesson }) => {
     if (currentStep.type === 'theory') {
       return (
         <div className={styles.theoryContainer}>
-          <h2>{topic.title}</h2>
-          <TheoryBlock data={topic.theory} />
+          <h2>{t(topic.title, language)}</h2>
+          <TheoryBlock data={topic.theory} language={language} />
           <button className={styles.nextBtn} onClick={handleNext}>
-            Понятно, дальше <ArrowRight size={16} />
+            {tUi('understoodNext', language)} <ArrowRight size={16} />
           </button>
         </div>
       );
@@ -143,18 +147,18 @@ export const LessonViewer: React.FC<Props> = ({ lesson }) => {
       return (
         <div className={styles.exerciseContainer}>
           <div className={styles.header}>
-            <h2>{topic.title}</h2>
-            <span className={styles.badge}>{currentStep.type === 'guided' ? 'Тренировка' : 'Практика'}</span>
+            <h2>{t(topic.title, language)}</h2>
+            <span className={styles.badge}>{currentStep.type === 'guided' ? tUi('training', language) : tUi('practice', language)}</span>
           </div>
           <ExerciseBlock 
             key={exercise.id} 
             exercise={exercise} 
             onComplete={(isCorrect) => handleExerciseComplete(isCorrect, exercise.id, currentStep.type as 'guided' | 'free' | 'test')} 
-            savedAnswer={answers[exercise.id] ? (answers[exercise.id].isCorrect ? ((exercise as any).correctAnswer as string || 'Выполнено') : '') : undefined}
+            savedAnswer={answers[exercise.id] ? (answers[exercise.id].isCorrect ? ((exercise as any).correctAnswer as string || tUi('done', language)) : '') : undefined}
           />
           {hasAnswered && (
             <button className={styles.nextBtn} onClick={handleNext}>
-              Дальше <ArrowRight size={16} />
+              {tUi('next', language)} <ArrowRight size={16} />
             </button>
           )}
         </div>
@@ -175,11 +179,11 @@ export const LessonViewer: React.FC<Props> = ({ lesson }) => {
             key={exercise.id} 
             exercise={exercise as Exercise} 
             onComplete={(isCorrect) => handleExerciseComplete(isCorrect, exercise.id, 'test')} 
-            savedAnswer={answers[exercise.id] ? (answers[exercise.id].isCorrect ? ((exercise as any).correctAnswer as string || 'Выполнено') : '') : undefined}
+            savedAnswer={answers[exercise.id] ? (answers[exercise.id].isCorrect ? ((exercise as any).correctAnswer as string || tUi('done', language)) : '') : undefined}
           />
           {hasAnswered && (
             <button className={styles.nextBtn} onClick={handleNext}>
-              {currentStep.exIndex < lesson.test.length - 1 ? 'Следующий вопрос' : 'Завершить'} <ArrowRight size={16} />
+              {currentStep.exIndex < lesson.test.length - 1 ? tUi('nextQuestion', language) : tUi('finish', language)} <ArrowRight size={16} />
             </button>
           )}
         </div>
@@ -189,30 +193,30 @@ export const LessonViewer: React.FC<Props> = ({ lesson }) => {
     if (currentStep.type === 'results') {
       return (
         <div className={styles.resultsContainer}>
-          <h2>Итоги занятия</h2>
+          <h2>{tUi('lessonResults', language)}</h2>
           
           <div className={styles.scoreCircle}>
             <div className={styles.scoreValue}>{finalScore}%</div>
-            <div className={styles.scoreLabel}>Понимание</div>
+            <div className={styles.scoreLabel}>{tUi('understanding', language)}</div>
           </div>
 
           {lesson.id === 'lesson-4' && (
             <div className={styles.subScores}>
-              <h3>Успеваемость по типам данных:</h3>
+              <h3>{tUi('dataTypesPerformance', language)}</h3>
               <div className={styles.subScoreGrid}>
-                {lesson.topics.map(t => {
-                  const exercises = [...t.guidedPractice, ...t.freePractice];
+                {lesson.topics.map(topicItem => {
+                  const exercises = [...topicItem.guidedPractice, ...topicItem.freePractice];
                   if (exercises.length === 0) return null;
                   const correctCount = exercises.filter(ex => answers[ex.id]?.isCorrect).length;
                   const percent = Math.round((correctCount / exercises.length) * 100);
-                  let label = t.title;
-                  if (t.id === 'methods_list') label = 'list';
-                  if (t.id === 'methods_set') label = 'set';
-                  if (t.id === 'methods_dict') label = 'dict';
-                  if (t.id === 'methods_immutable') label = 'str, tuple, числа';
+                  let label = topicItem.title;
+                  if (topicItem.id === 'methods_list') label = 'list';
+                  if (topicItem.id === 'methods_set') label = 'set';
+                  if (topicItem.id === 'methods_dict') label = 'dict';
+                  if (topicItem.id === 'methods_immutable') label = 'str, tuple, числа';
                   return (
-                    <div key={t.id} className={styles.subScoreItem}>
-                      <span className={styles.subLabel}>{label}</span>
+                    <div key={topicItem.id} className={styles.subScoreItem}>
+                      <span className={styles.subLabel}>{t(label as any, language)}</span>
                       <span className={styles.subValue}>{percent}%</span>
                     </div>
                   );
@@ -222,35 +226,35 @@ export const LessonViewer: React.FC<Props> = ({ lesson }) => {
           )}
           
           <div className={styles.summaryList}>
-            <h3>Что мы выучили сегодня:</h3>
+            <h3>{tUi('whatWeLearned', language)}</h3>
             <ul>
               {lesson.summary.map((s, i) => (
-                <li key={i}>{s}</li>
+                <li key={i}>{t(s, language)}</li>
               ))}
             </ul>
           </div>
 
           <details className={styles.wrongAnswers}>
-            <summary>Ошибки и правильные ответы</summary>
+            <summary>{tUi('mistakesAndAnswers', language)}</summary>
             <div className={styles.wrongAnswersList}>
-              {lesson.topics.flatMap(t => [...t.guidedPractice, ...t.freePractice]).concat(lesson.test as any)
+              {lesson.topics.flatMap(topicItem => [...topicItem.guidedPractice, ...topicItem.freePractice]).concat(lesson.test as any)
                 .filter(ex => answers[ex.id] && !answers[ex.id].isCorrect)
                 .map(ex => (
                   <div key={ex.id} className={styles.wrongAnswerItem}>
-                    <p className={styles.q}><strong>В:</strong> {ex.type === 'code-run' ? (ex as any).prompt : ex.question}</p>
-                    <p className={styles.a}><strong>Ожидалось:</strong> {
+                    <p className={styles.q}><strong>{tUi('q', language)}</strong> {t(ex.type === 'code-run' ? (ex as any).prompt : ex.question, language)}</p>
+                    <p className={styles.a}><strong>{tUi('expected', language)}</strong> {
                       ex.type === 'code-run' ? 
-                        ((ex as any).expectedStdout || 'Код должен выполнить правильные действия') :
+                        ((ex as any).expectedStdout || tUi('codeMustPerformRightActions', language)) :
                         (Array.isArray(ex.correctAnswer) ? ex.correctAnswer[0] : ex.correctAnswer)
                     }</p>
-                    <p className={styles.e}><i>{ex.explanation || (ex as any).explanationOnFail}</i></p>
+                    <p className={styles.e}><i>{t(ex.explanation || (ex as any).explanationOnFail, language)}</i></p>
                   </div>
                 ))}
             </div>
           </details>
           
           <Link href="/" className={styles.homeBtn}>
-            На главную
+            {tUi('toHome', language)}
           </Link>
         </div>
       );
@@ -262,17 +266,20 @@ export const LessonViewer: React.FC<Props> = ({ lesson }) => {
       <div className={styles.topBar}>
         {history.length > 1 && currentStep.type !== 'results' ? (
           <button className={styles.backLink} onClick={handleBack}>
-            <ArrowLeft size={20} /> Назад
+            <ArrowLeft size={20} /> {tUi('back', language)}
           </button>
         ) : (
           <Link href="/" className={styles.backLink}>
-            <ArrowLeft size={20} /> На главную
+            <ArrowLeft size={20} /> {tUi('toHome', language)}
           </Link>
         )}
         <div className={styles.progressWrap}>
           <div className={styles.progressBar}>
             <div className={styles.progressFill} style={{ width: `${progressPercent}%` }} />
           </div>
+        </div>
+        <div style={{ marginLeft: '16px' }}>
+          <LanguageSwitcher />
         </div>
       </div>
       

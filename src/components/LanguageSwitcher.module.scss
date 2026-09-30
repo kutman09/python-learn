@@ -1,0 +1,30 @@
+@use '@/styles/variables' as vars;
+
+.switcher, .switcherPlaceholder {
+  display: flex;
+  background: vars.$card-bg;
+  border-radius: 20px;
+  padding: 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  width: 90px;
+  height: 36px;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn {
+  border: none;
+  background: transparent;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-weight: bold;
+  font-size: 14px;
+  color: vars.$text-muted;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &.active {
+    background: vars.$primary-color;
+    color: white;
+  }
+}
