@@ -3,6 +3,7 @@ import { lesson1 } from './lesson-1-basics';
 import { lesson2 } from './lesson-2-operators';
 import { lesson3 } from './lesson-3-conditions';
 import { lesson4 } from './lesson-4-methods';
+import { lesson5 } from './lesson-5-loops';
 
 export const lessonsList = [
   {
@@ -38,7 +39,7 @@ export const lessonsList = [
     slug: 'lesson-5-loops',
     title: 'Занятие 5: Циклы',
     description: 'for и while.',
-    available: false,
+    available: true,
   }
 ];
 
@@ -47,5 +48,6 @@ export const getLessonBySlug = (slug: string): LessonContent | undefined => {
   if (slug === 'lesson-2-operators') return lesson2;
   if (slug === 'lesson-3-conditions') return lesson3;
   if (slug === 'lesson-4-methods') return lesson4;
+  if (slug === 'lesson-5-loops') return lesson5;
   return undefined;
 };

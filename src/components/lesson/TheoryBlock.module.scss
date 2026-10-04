@@ -25,6 +25,60 @@
     }
   }
 
+
+  .trace {
+    background-color: vars.$background;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: vars.$border-radius;
+    padding: 16px;
+    margin: 16px 0;
+    
+    .trace-title {
+      font-weight: 600;
+      color: vars.$text-main;
+      margin-bottom: 12px;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .trace-step {
+      display: flex;
+      margin-bottom: 8px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      
+      &:last-child {
+        margin-bottom: 0;
+        padding-bottom: 0;
+        border-bottom: none;
+      }
+      
+      .step-num {
+        flex: 0 0 70px;
+        font-weight: bold;
+        color: vars.$primary-color;
+      }
+      .step-action {
+        flex: 1;
+        font-family: monospace;
+      }
+      .step-result {
+        flex: 1;
+        color: vars.$text-muted;
+      }
+    }
+    
+    @media (max-width: 600px) {
+      .trace-step {
+        flex-direction: column;
+        .step-num {
+          margin-bottom: 4px;
+        }
+      }
+    }
+  }
+
   .warning {
     background-color: vars.$error-light;
     padding: 12px;
