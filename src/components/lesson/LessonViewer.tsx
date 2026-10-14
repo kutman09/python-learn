@@ -200,7 +200,7 @@ export const LessonViewer: React.FC<Props> = ({ lesson }) => {
             <div className={styles.scoreLabel}>{tUi('understanding', language)}</div>
           </div>
 
-          {(lesson.id === 'lesson-4' || lesson.id === 'lesson-5') && (
+          {(lesson.id === 'lesson-4' || lesson.id === 'lesson-5' || lesson.id === 'lesson-6') && (
             <div className={styles.subScores}>
               <h3>{tUi('topicPerformance', language)}</h3>
               <div className={styles.subScoreGrid}>
