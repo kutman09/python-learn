@@ -199,7 +199,7 @@ export const lesson7: LessonContent = {
             "ru": "Впишите имя первого обязательного параметра любого конструктора в Python:",
             "ky": "Python'догу конструктордун биринчи милдеттүү параметринин атын жазыңыз:"
           },
-          "codeTemplate": "class User:\n    def __init__(____, username):\n        self.username = username",
+          "codeTemplate": "class User:\n    def __init__(___, username):\n        self.username = username",
           "correctAnswer": "self",
           "explanation": {
             "ru": "Первым параметром конструктора и методов всегда указывается self.",
@@ -537,7 +537,7 @@ export const lesson7: LessonContent = {
             "ru": "Впишите ключевое слово для вызова метода родительского класса:",
             "ky": "Аталык класстын методун чакыруу үчүн керектүү сөздү жазыңыз:"
           },
-          "codeTemplate": "class Child(Parent):\n    def __init__(self, name):\n        _______().__init__(name)",
+          "codeTemplate": "class Child(Parent):\n    def __init__(self, name):\n        ___().__init__(name)",
           "correctAnswer": "super",
           "explanation": {
             "ru": "Функция super() возвращает ссылку на родительский класс.",
@@ -1163,7 +1163,7 @@ export const lesson7: LessonContent = {
         "ru": "Впишите оператор вызова со скобками для создания нового объекта класса Robot:",
         "ky": "Robot классынан жаңы объект түзүү үчүн кашаалуу чакыруу операторун жазыңыз:"
       },
-      "codeTemplate": "class Robot:\n    pass\n\nr = Robot____",
+      "codeTemplate": "class Robot:\n    pass\n\nr = Robot___",
       "correctAnswer": "()",
       "explanation": {
         "ru": "Чтобы создать новый экземпляр класса, после его имени обязательно указываются круглые скобки: Robot().",

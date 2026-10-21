@@ -83,5 +83,6 @@ export interface TestQuestion extends BaseExercise {
   options?: TString[]; // for multiple choice
   correctAnswer: string | string[];
   code?: string;
+  codeTemplate?: string;
 }
 
