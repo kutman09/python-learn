@@ -5,6 +5,7 @@ import { lesson3 } from './lesson-3-conditions';
 import { lesson4 } from './lesson-4-methods';
 import { lesson5 } from './lesson-5-loops';
 import { lesson6 } from './lesson-6-functions';
+import { lesson7 } from './lesson-7-oop';
 
 export const lessonsList = [
   {
@@ -48,6 +49,13 @@ export const lessonsList = [
     title: { ru: 'Занятие 6: Функции', ky: '6-сабак: Функциялар' },
     description: { ru: 'def, параметры, return, область видимости и lambda.', ky: 'def, параметрлер, return, көрүнүү аймагы жана lambda.' },
     available: true,
+  },
+  {
+    id: 'l7',
+    slug: 'lesson-7-oop',
+    title: { ru: 'Занятие 7: ООП и его принципы', ky: '7-сабак: ООП жана анын принциптери' },
+    description: { ru: 'Классы, объекты, __init__, self, инкапсуляция, наследование и полиморфизм.', ky: 'Класстар, объекттер, __init__, self, инкапсуляция, мурастоо жана полиморфизм.' },
+    available: true,
   }
 ];
 
@@ -58,5 +66,6 @@ export const getLessonBySlug = (slug: string): LessonContent | undefined => {
   if (slug === 'lesson-4-methods') return lesson4;
   if (slug === 'lesson-5-loops') return lesson5;
   if (slug === 'lesson-6-functions') return lesson6;
+  if (slug === 'lesson-7-oop') return lesson7;
   return undefined;
 };

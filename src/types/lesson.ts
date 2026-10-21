@@ -1,4 +1,4 @@
-export type LessonSlug = 'lesson-1-basics' | 'lesson-2-operators' | 'lesson-3-conditions' | 'lesson-4-methods' | 'lesson-5-loops' | 'lesson-6-functions';
+export type LessonSlug = 'lesson-1-basics' | 'lesson-2-operators' | 'lesson-3-conditions' | 'lesson-4-methods' | 'lesson-5-loops' | 'lesson-6-functions' | 'lesson-7-oop';
 
 export interface LocalizedText {
   ru: string;
